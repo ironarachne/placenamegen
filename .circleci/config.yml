@@ -3,36 +3,37 @@
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2
 jobs:
-	build:
-		docker:
-			- image: circleci/golang:1.11
-		working_directory: /go/src/github.com/ironarachne/placenamegen
-		steps:
-			- checkout
-			- run: go get -v -t -d ./...
-			- run: go test -v ./...
-			- setup_remote_docker:
-					docker_layer_caching: true
-			- run: |
-					TAG=0.1.$CIRCLE_BUILD_NUM
-					docker build -t ironarachne/placenamegen:$TAG -t ironarachne/placenamegen:latest .
-					docker login -u $DOCKER_USER -p $DOCKER_PASS
-					docker push ironarachne/placenamegen:$TAG
-					docker push ironarachne/placenamegen:latest
-	deploy:
-		machine:
-				enabled: true
-		steps:
-			- run: curl -X POST 'https://portainer.ironarachne.com/api/webhooks/'
+  build:
+    docker:
+      - image: circleci/golang:1.11
+    working_directory: /go/src/github.com/ironarachne/placenamegen
+    steps:
+      - checkout
+      - run: go get -v -t -d ./...
+      - run: go test -v ./...
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run: |
+          cd cmd/placenamegen
+          TAG=0.1.$CIRCLE_BUILD_NUM
+          docker build -t ironarachne/placenamegen:$TAG -t ironarachne/placenamegen:latest .
+          docker login -u $DOCKER_USER -p $DOCKER_PASS
+          docker push ironarachne/placenamegen:$TAG
+          docker push ironarachne/placenamegen:latest
+  deploy:
+    machine:
+        enabled: true
+    steps:
+      - run: curl -X POST 'https://portainer.ironarachne.com/api/webhooks/'
 
 workflows:
-	version: 2
-	build-and-deploy:
-		jobs:
-			- build
-			- deploy:
-					requires:
-						- build
-					filters:
-						branches:
-							only: master
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master

@@ -1,2 +1,2 @@
 #!/bin/bash
-go build -o build/placenamegen
+go build -o build/placenamegen cmd/placenamegen/main.go

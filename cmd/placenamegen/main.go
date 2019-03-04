@@ -14,7 +14,7 @@ func main() {
 	app.Get("/", func(ctx iris.Context) {
 		rand.Seed(time.Now().UnixNano())
 		placeName := placenamegen.Generate()
-		ctx.Write(placeName)
+		ctx.Writef(placeName)
 	})
 
 	app.Run(iris.Addr(":7917"))
