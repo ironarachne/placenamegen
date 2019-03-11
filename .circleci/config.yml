@@ -20,20 +20,12 @@ jobs:
           docker login -u $DOCKER_USER -p $DOCKER_PASS
           docker push ironarachne/placenamegen:$TAG
           docker push ironarachne/placenamegen:latest
-  deploy:
-    machine:
-        enabled: true
-    steps:
-      - run: curl -X POST 'https://portainer.ironarachne.com/api/webhooks/'
 
 workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - build
-      - deploy:
-          requires:
-            - build
+      - build:
           filters:
             branches:
               only: master

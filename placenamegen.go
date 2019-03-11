@@ -32,6 +32,16 @@ func randomConsonant() string {
 	return utility.RandomItem(consonants)
 }
 
+func randomConsonantGroup(size int) []string {
+	var consonants = []string{}
+
+	for i := 0; i < size; i++ {
+		consonants = append(consonants, randomConsonant())
+	}
+
+	return consonants
+}
+
 func randomVowel() string {
 	vowels := map[string]int{
 		"a": 3,
@@ -44,46 +54,52 @@ func randomVowel() string {
 	return utility.RandomItemFromThresholdMap(vowels)
 }
 
-func randomSuffix() string {
-	suffixes := []string{
-		"a",
-		"an",
-		"en",
-		"ia",
-		"is",
+func randomSyllable(consonants []string) string {
+	c1 := utility.RandomItem(consonants)
+	c2 := utility.RandomItem(consonants)
+
+	v := randomVowel()
+
+	syllable := c1 + v
+
+	i := rand.Intn(10)
+	if i < 3 {
+		syllable += c2
 	}
 
-	return utility.RandomItem(suffixes)
+	return syllable
+}
+
+func randomSuffix() string {
+	suffixes := map[string]int{
+		"a":   6,
+		"an":  2,
+		"en":  1,
+		"ia":  9,
+		"ion": 1,
+		"is":  2,
+		"ya":  1,
+	}
+
+	return utility.RandomItemFromThresholdMap(suffixes)
 }
 
 // Generate generates a random place name
 func Generate() string {
-	c1 := randomConsonant()
-	c2 := randomConsonant()
-	c3 := randomConsonant()
+	group1 := randomConsonantGroup(3)
+	group2 := randomConsonantGroup(3)
+	s1 := randomSyllable(group1)
+	s2 := randomSyllable(group2)
+	s3 := randomSyllable(group2)
 
-	cons := []string{c1, c2, c3}
+	name := s1 + s2
 
-	v1 := randomVowel()
-	v2 := randomVowel()
-
-	vowels := []string{v1, v2}
-
-	s := randomSuffix()
-
-	name := ""
-
-	nameLength := rand.Intn(4) + 3
-
-	for i := 0; i < nameLength; i++ {
-		if i%2 == 0 {
-			name += utility.RandomItem(cons)
-		} else {
-			name += utility.RandomItem(vowels)
-		}
+	i := rand.Intn(10)
+	if i < 3 {
+		name += s3
 	}
 
-	name += s
+	name += randomSuffix()
 
 	name = strings.Title(name)
 
