@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"strings"
 
-	"github.com/ironarachne/utility"
+	"github.com/ironarachne/random"
 )
 
 func randomConsonant() string {
@@ -29,7 +29,7 @@ func randomConsonant() string {
 		"z",
 	}
 
-	return utility.RandomItem(consonants)
+	return random.Item(consonants)
 }
 
 func randomConsonantGroup(size int) []string {
@@ -51,12 +51,12 @@ func randomVowel() string {
 		"u": 1,
 	}
 
-	return utility.RandomItemFromThresholdMap(vowels)
+	return random.ItemFromThresholdMap(vowels)
 }
 
 func randomSyllable(consonants []string) string {
-	c1 := utility.RandomItem(consonants)
-	c2 := utility.RandomItem(consonants)
+	c1 := random.Item(consonants)
+	c2 := random.Item(consonants)
 
 	v := randomVowel()
 
@@ -81,7 +81,7 @@ func randomSuffix() string {
 		"ya":  1,
 	}
 
-	return utility.RandomItemFromThresholdMap(suffixes)
+	return random.ItemFromThresholdMap(suffixes)
 }
 
 // Generate generates a random place name
